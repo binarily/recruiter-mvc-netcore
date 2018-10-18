@@ -1,0 +1,13 @@
+﻿@model List<JobOffer>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h2>Index</h2>
+<ul>
+    @foreach (var jobOffer in Model){
+        <li>@Html.ActionLink(jobOffer.JobTitle, "Details", "JobOffer", new {id=jobOffer.Id})</li>
+    }
+</ul>
+
