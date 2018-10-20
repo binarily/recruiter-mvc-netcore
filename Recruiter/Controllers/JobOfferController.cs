@@ -22,11 +22,11 @@ namespace Recruiter.Controllers
         }
         private static List<JobOffer> _jobOffers = new List<JobOffer>
         {
-            new JobOffer{Id=1, JobTitle="Backend Developer"},
-            new JobOffer{Id=2, JobTitle="Frontend Developer"},
-            new JobOffer{Id=3, JobTitle="Manager"},
-            new JobOffer{Id=4, JobTitle="Teacher"},
-            new JobOffer{Id=5, JobTitle="Cook"},
+            new JobOffer{Id=1, JobTitle="Backend Developer", PostingDate = DateTime.Now},
+            new JobOffer{Id=2, JobTitle="Frontend Developer", PostingDate = DateTime.Now},
+            new JobOffer{Id=3, JobTitle="Manager", PostingDate = DateTime.Now},
+            new JobOffer{Id=4, JobTitle="Teacher", PostingDate = DateTime.Now},
+            new JobOffer{Id=5, JobTitle="Cook", PostingDate = DateTime.Now},
         };
     }
 }
