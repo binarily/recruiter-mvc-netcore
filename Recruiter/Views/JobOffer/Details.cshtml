@@ -1,59 +1,66 @@
 ﻿@model Recruiter.Models.JobOffer
 
 @{
-    ViewData["Title"] = "Details";
+    ViewData["Title"] = "Offer";
 }
 
 <h2>Details</h2>
 
-<div>
-    <h4>JobOffer</h4>
+<div class="row page-box">
+    <h1>@Model.JobTitle</h1>
+    <div class="col-sm-8">
+        <div class="model-description" id="previewMarkdown">
+            @Model.Description
+        </div>
+    </div>
     <hr />
-    <dl class="dl-horizontal">
-        <dt>
-            @Html.DisplayNameFor(model => model.Id)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.Id)
-        </dd>
-        <dt>
-            @Html.DisplayNameFor(model => model.JobTitle)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.JobTitle)
-        </dd>
-        <dt>
-            @Html.DisplayNameFor(model => model.PostingDate)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.PostingDate)
-        </dd>
-        <dt>
-            @Html.DisplayNameFor(model => model.EmploymentType)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.EmploymentType)
-        </dd>
-        <dt>
-            @Html.DisplayNameFor(model => model.Description)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.Description)
-        </dd>
-        <dt>
-            @Html.DisplayNameFor(model => model.ResponsibilitiesDescription)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.ResponsibilitiesDescription)
-        </dd>
-        <dt>
-            @Html.DisplayNameFor(model => model.Qualifications)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.Qualifications)
-        </dd>
-    </dl>
+    <div class="col-sm-4">
+        <div class="offer-details">
+            <div>
+                <label>@Html.DisplayNameFor(model => model.Company)</label>
+                <span>@Html.DisplayFor(model => model.Company.Name)</span>
+            </div>
+            <div>
+                <label>@Html.DisplayNameFor(model => model.Location)</label>
+                <span>@Html.DisplayFor(model => model.Location)</span>
+            </div>
+            @if (Model.SalaryFrom.HasValue)
+            {
+                <div>
+                    <label>@Html.DisplayNameFor(model => model.SalaryFrom)</label>
+                    <span>@Html.DisplayFor(model => model.SalaryFrom)</span>
+                </div>
+            }
+            @if (Model.SalaryTo.HasValue)
+            {
+                <div>
+                    <label>@Html.DisplayNameFor(model => model.SalaryTo)</label>
+                    <span>@Html.DisplayFor(model => model.SalaryTo)</span>
+                </div>
+            }
+            <div>
+                <label>@Html.DisplayNameFor(model => model.Created)</label>
+                <span>@Html.DisplayFor(model => model.Created)</span>
+            </div>
+            @if (Model.ValidUntil.HasValue)
+            {
+                <div>
+                    <label>@Html.DisplayNameFor(model => model.ValidUntil)</label>
+                    <span>@Model.ValidUntil.Value.Subtract(DateTime.Now).Days days (@Model.ValidUntil)</span>
+                </div>
+            }
+            <div>
+                @Html.ActionLink("Edit", "Edit", new { id=Model.Id}, new { @class = "btn btn-primary" })
+                @using (Html.BeginForm("Delete", "JobOffer", new { id = Model.Id }, FormMethod.Post, null, new { style = "display:inline;" }))
+                {
+                    @Html.AntiForgeryToken()
+                    <button type="submit" class="btn btn-danger">Delete</button>
+                }
+            </div>
+        </div>
+    </div>
+
 </div>
 <div>
-    <a asp-action="Index">Back to List</a>
+    @Html.ActionLink("Return to job offers", "Index", "JobOffer", null, new { @class="btn btn-primary"})
 </div>
