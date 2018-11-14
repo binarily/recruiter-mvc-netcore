@@ -1,4 +1,4 @@
-﻿@model Recruiter.Models.JobOffer
+﻿@model Recruiter.Models.JobOfferDetailsViewModel
 
 @{
     ViewData["Title"] = "Offer";
@@ -7,58 +7,94 @@
 <h2>Details</h2>
 
 <div class="row page-box">
-    <h1>@Model.JobTitle</h1>
+    <h1>@Model.Offer.JobTitle</h1>
     <div class="col-sm-8">
         <div class="model-description" id="previewMarkdown">
-            @Model.Description
+            @Model.Offer.Description
         </div>
     </div>
     <hr />
     <div class="col-sm-4">
         <div class="offer-details">
             <div>
-                <label>@Html.DisplayNameFor(model => model.Company)</label>
-                <span>@Html.DisplayFor(model => model.Company.Name)</span>
+                <label>@Html.DisplayNameFor(model => model.Offer.Company)</label>
+                <span>@Html.DisplayFor(model => model.Offer.Company.Name)</span>
             </div>
             <div>
-                <label>@Html.DisplayNameFor(model => model.Location)</label>
-                <span>@Html.DisplayFor(model => model.Location)</span>
+                <label>@Html.DisplayNameFor(model => model.Offer.Location)</label>
+                <span>@Html.DisplayFor(model => model.Offer.Location)</span>
             </div>
-            @if (Model.SalaryFrom.HasValue)
+            @if (Model.Offer.SalaryFrom.HasValue)
             {
                 <div>
-                    <label>@Html.DisplayNameFor(model => model.SalaryFrom)</label>
-                    <span>@Html.DisplayFor(model => model.SalaryFrom)</span>
+                    <label>@Html.DisplayNameFor(model => model.Offer.SalaryFrom)</label>
+                    <span>@Html.DisplayFor(model => model.Offer.SalaryFrom)</span>
                 </div>
             }
-            @if (Model.SalaryTo.HasValue)
+            @if (Model.Offer.SalaryTo.HasValue)
             {
                 <div>
-                    <label>@Html.DisplayNameFor(model => model.SalaryTo)</label>
-                    <span>@Html.DisplayFor(model => model.SalaryTo)</span>
-                </div>
-            }
-            <div>
-                <label>@Html.DisplayNameFor(model => model.Created)</label>
-                <span>@Html.DisplayFor(model => model.Created)</span>
-            </div>
-            @if (Model.ValidUntil.HasValue)
-            {
-                <div>
-                    <label>@Html.DisplayNameFor(model => model.ValidUntil)</label>
-                    <span>@Model.ValidUntil.Value.Subtract(DateTime.Now).Days days (@Model.ValidUntil)</span>
+                    <label>@Html.DisplayNameFor(model => model.Offer.SalaryTo)</label>
+                    <span>@Html.DisplayFor(model => model.Offer.SalaryTo)</span>
                 </div>
             }
             <div>
-                @Html.ActionLink("Edit", "Edit", new { id=Model.Id}, new { @class = "btn btn-primary" })
-                @using (Html.BeginForm("Delete", "JobOffer", new { id = Model.Id }, FormMethod.Post, null, new { style = "display:inline;" }))
-                {
-                    @Html.AntiForgeryToken()
-                    <button type="submit" class="btn btn-danger">Delete</button>
-                }
+                <label>@Html.DisplayNameFor(model => model.Offer.Created)</label>
+                <span>@Html.DisplayFor(model => model.Offer.Created)</span>
             </div>
+            @if (Model.Offer.ValidUntil.HasValue)
+            {
+                <div>
+                    <label>@Html.DisplayNameFor(model => model.Offer.ValidUntil)</label>
+                    <span>@Model.Offer.ValidUntil.Value.Subtract(DateTime.Now).Days days (@Model.Offer.ValidUntil)</span>
+                </div>
+            }
+                <div>
+                    @Html.ActionLink("Apply now", "Create", "JobApplications", new { offerId = Model.Offer.Id }, new { @class = "btn btn-primary" })
+                    @Html.ActionLink("Edit", "Edit", new { id = Model.Offer.Id }, new { @class = "btn btn-primary" })
+                    @using (Html.BeginForm("Delete", "JobOffer", new { id = Model.Offer.Id }, FormMethod.Post, null, new { style = "display:inline;" }))
+                    {
+                        @Html.AntiForgeryToken()
+                        <button type="submit" class="btn btn-danger">Delete</button>
+                    }
+                </div>
         </div>
     </div>
+
+</div>
+<div class="row page-box">
+    <table class="table">
+        <thead>
+            <tr>
+                <th>
+                    Name
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Applications.First().PhoneNumber)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Applications.First().EmailAddress)
+                </th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model.Applications)
+            {
+                <tr>
+                    <td>
+                        @Html.ActionLink(item.FirstName + " " + item.LastName, "Details", "JobApplications", new { id = item.Id })
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.PhoneNumber)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.EmailAddress)
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
 
 </div>
 <div>

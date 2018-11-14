@@ -5,8 +5,8 @@ using System.Threading.Tasks;
 
 namespace Recruiter.Models
 {
-    public class JobOfferCreateView : JobOffer
+    public class JobApplicationCreateViewModel : JobApplication
     {
-        public IEnumerable<Company> Companies { get; set; }
+        public JobOffer Offer { get; set; }
     }
 }

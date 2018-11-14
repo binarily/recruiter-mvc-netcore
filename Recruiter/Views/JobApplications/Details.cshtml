@@ -1,0 +1,62 @@
+﻿@model Recruiter.Models.JobApplication
+
+@{
+    ViewData["Title"] = "Details";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>JobApplication</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.OfferId)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.OfferId)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.FirstName)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.FirstName)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.LastName)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.LastName)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.PhoneNumber)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.PhoneNumber)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.EmailAddress)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.EmailAddress)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Description)
+        </dt>
+        <dd>
+                <div class="model-description" id="previewMarkdown">
+                    @Model.Description
+                </div>
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.CvUrl)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.CvUrl)
+        </dd>
+    </dl>
+</div>
+<div>
+    <a asp-action="Edit" asp-route-id="@Model.Id">Edit</a> |
+    <a asp-action="Index">Back to List</a>
+</div>

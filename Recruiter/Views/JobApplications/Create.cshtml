@@ -1,0 +1,60 @@
+﻿@model Recruiter.Models.JobApplicationCreateViewModel
+
+@{
+    ViewData["Title"] = "Create";
+}
+
+<h2>Apply</h2>
+
+<h4>Position you're applying for: @Model.Offer.JobTitle</h4>
+<hr />
+<div class="row">
+    <div class="col-md-8">
+        @using (@Html.BeginForm("Create"))
+        {
+            @Html.AntiForgeryToken()
+
+            @Html.HiddenFor(m => m.OfferId)
+            <div class="form-group">
+                @Html.LabelFor(m => m.FirstName)
+                @Html.EditorFor(m => m.FirstName, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(m => m.FirstName, "", new { @class = "text-danger" })
+            </div>
+            <div class="form-group">
+                @Html.LabelFor(m => m.LastName)
+                @Html.EditorFor(m => m.LastName, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(m => m.LastName, "", new { @class = "text-danger" })
+            </div>
+            <div class="form-group">
+                @Html.LabelFor(m => m.PhoneNumber)
+                @Html.EditorFor(m => m.PhoneNumber, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(m => m.PhoneNumber, "", new { @class = "text-danger" })
+            </div>
+            <div class="form-group">
+                @Html.LabelFor(m => m.EmailAddress)
+                @Html.EditorFor(m => m.EmailAddress, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(m => m.EmailAddress, "", new { @class = "text-danger" })
+            </div>
+            <div class="form-group">
+                @Html.LabelFor(m => m.Description)
+                @Html.TextAreaFor(m => m.Description, new { @class = "form-control", placeholder = "Enter description" })
+                @Html.ValidationMessageFor(m => m.Description, "", new { @class = "text-danger" })
+            </div>
+            <div class="form-group">
+                <div class="checkbox">
+                    <label>
+                        @Html.CheckBoxFor(m=>m.ContractAgreement) I consent to my data being used by Recruiter for purposes of recruitment process.
+                    </label>
+                </div>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-default" />
+            </div>
+        }        
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
