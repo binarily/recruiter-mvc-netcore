@@ -78,24 +78,28 @@
                 <th></th>
             </tr>
         </thead>
-        <tbody>
-            @foreach (var item in Model.Applications)
-            {
-                <tr>
-                    <td>
-                        @Html.ActionLink(item.FirstName + " " + item.LastName, "Details", "JobApplications", new { id = item.Id })
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.PhoneNumber)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.EmailAddress)
-                    </td>
-                </tr>
-            }
+        <tbody id="applicationsList">
         </tbody>
     </table>
+    <script src="https://ajax.aspnetcdn.com/ajax/jQuery/jquery-2.0.3.min.js"></script>
+    <script>
+        var uri = '../../api/applications/'+@Model.Offer.Id;
 
+        $(document).ready(function () {
+            // Send an AJAX request
+            $.getJSON(uri)
+                .done(function (data) {
+                    // On success, 'data' contains a list of products.
+                    $.each(data, function (key, item) {
+                        // Add a list item for the product.
+                        $(`<tr>
+                            <td><a href="../../JobApplications/Details/${item.id}">${item.firstName} ${item.lastName}</a></td>
+                            <td>${item.phoneNumber}</td>
+                            <td>${item.emailAddress}</td></tr>`).appendTo($('#applicationsList'));
+                    });
+                });
+        })
+    </script>
 </div>
 <div>
     @Html.ActionLink("Return to job offers", "Index", "JobOffer", null, new { @class="btn btn-primary"})

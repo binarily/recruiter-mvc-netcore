@@ -1,0 +1,29 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Recruiter</name>
+    </assembly>
+    <members>
+        <member name="M:Recruiter.Controllers.JAAPIController.GetJobApplicationByOffer(System.Int32)">
+            <summary>
+            Get an application with a given ID.
+            </summary>
+            <param name="id"></param>
+            <returns>An application with a given ID.</returns>
+        </member>
+        <member name="M:Recruiter.Controllers.JOAPIController.GetJobOffer(System.Int32)">
+            <summary>
+            Get an offer with a given ID.
+            </summary>
+            <param name="id"></param>
+            <returns>An offer with a given ID.</returns>
+        </member>
+        <member name="M:Recruiter.Controllers.JOAPIController.GetJobOffers(System.String,System.String)">
+            <summary>
+            Get all offers available or with name matching query.
+            </summary>
+            <param name="query"></param>
+            <returns>A list of offers.</returns>
+        </member>
+    </members>
+</doc>

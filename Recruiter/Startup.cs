@@ -11,6 +11,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Recruiter.EntityFramework;
+using Swashbuckle.AspNetCore.Swagger;
 
 namespace Recruiter
 {
@@ -38,6 +39,13 @@ namespace Recruiter
             var connection = @"Server=(localdb)\mssqllocaldb;Database=Recruiter;Trusted_Connection=True;";
 
             services.AddDbContext<DataContext>(options => options.UseSqlServer(connection));
+
+            //Swagger configuration
+            services.AddSwaggerGen(c =>
+            {
+            c.SwaggerDoc("v1", new Info { Title = "Recruiter API", Version = "v1" });
+            c.IncludeXmlComments("Recruiter.xml");
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -62,6 +70,13 @@ namespace Recruiter
                 routes.MapRoute(
                     name: "default",
                     template: "{controller=Home}/{action=Index}/{id?}");
+            });
+
+            //Swagger configuration
+            app.UseSwagger();
+            app.UseSwaggerUI(c =>
+            {
+                c.SwaggerEndpoint("/swagger/v1/swagger.json", "Recruiter API");
             });
         }
     }

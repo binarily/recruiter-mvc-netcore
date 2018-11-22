@@ -1,7 +1,7 @@
 ﻿@model Recruiter.Models.JobOfferCreateViewModel
 
 @{
-    ViewBag.Title= "Edit";
+    ViewBag.Title = "Edit";
 }
 <div class="row page-box">
     <div class="col-sm-12">
@@ -9,29 +9,29 @@
         @using (@Html.BeginForm("Create"))
         {
             @Html.AntiForgeryToken()
-            @Html.HiddenFor(m=>m.Offer.Company)
+            @Html.HiddenFor(m => m.Offer.Company)
             <div class="form-group">
                 @Html.LabelFor(m => m.Offer.JobTitle)
-                @Html.EditorFor(m => m.Offer.JobTitle, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.EditorFor(m => m.Offer.JobTitle, new { htmlAttributes = new { @class = "form-control", required = "true" } })
                 @Html.ValidationMessageFor(m => m.Offer.JobTitle, "", new { @class = "text-danger" })
             </div>
             <div class="form-group">
                 @Html.LabelFor(m => m.Offer.Company)
                 @Html.DropDownListFor(m => m.Offer.CompanyId,
                Model.Companies.Select(c=>new SelectListItem(c.Name, c.Id.ToString())),
-               new {  @class = "form-control" } )
+               new {  @class = "form-control", required = "true" } )
                 @Html.ValidationMessageFor(m => m.Offer.CompanyId, "", new { @class = "text-danger" })
             </div>
             <div class="form-group">
                 @Html.LabelFor(m => m.Offer.Location)
-                @Html.EditorFor(m => m.Offer.Location, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.EditorFor(m => m.Offer.Location, new { htmlAttributes = new { @class = "form-control", required = "true" } })
                 @Html.ValidationMessageFor(m => m.Offer.Location, "", new { @class = "text-danger" })
             </div>
             <div class="form-group">
                 @Html.LabelFor(m => m.Offer.SalaryFrom)
                 <div class="input-group">
                     <span class="input-group-addon">PLN</span>
-                    @Html.EditorFor(m => m.Offer.SalaryFrom, new { htmlAttributes = new { @class = "form-control", placeholder = "From" } })
+                    @Html.EditorFor(m => m.Offer.SalaryFrom, new { htmlAttributes = new { @class = "form-control", placeholder = "From", required = "true", min = 0, number = "true" } })
                     <span class="input-group-addon">.00</span>
                 </div>
                 @Html.ValidationMessageFor(m => m.Offer.SalaryFrom, "", new { @class = "text-danger" })
@@ -40,7 +40,7 @@
                 @Html.LabelFor(m => m.Offer.SalaryTo)
                 <div class="input-group">
                     <span class="input-group-addon">PLN</span>
-                    @Html.EditorFor(m => m.Offer.SalaryTo, new { htmlAttributes = new { @class = "form-control", placeholder = "To" } })
+                    @Html.EditorFor(m => m.Offer.SalaryTo, new { htmlAttributes = new { @class = "form-control", placeholder = "To", required = "true", min = 0, number = "true" } })
                     <span class="input-group-addon">.00</span>
                 </div>
                 @Html.ValidationMessageFor(m => m.Offer.SalaryTo, "", new { @class = "text-danger" })
@@ -48,7 +48,7 @@
             <div class="form-group">
                 @Html.LabelFor(m => m.Offer.ValidUntil)
                 <div class="input-group">
-                    @Html.EditorFor(m => m.Offer.ValidUntil, new { @Value=Model.Offer.ValidUntil.ToString(), htmlAttributes = new { @class = "form-control", type = "Date" } })
+                    @Html.EditorFor(m => m.Offer.ValidUntil, new { @Value = Model.Offer.ValidUntil.ToString(), htmlAttributes = new { @class = "form-control", type = "Date", required = "true" } })
                     <span class="input-group-addon">
                         <span class="glyphicon glyphicon-calendar" />
                     </span>
@@ -57,7 +57,7 @@
             </div>
             <div class="form-group">
                 @Html.LabelFor(m => m.Offer.Description)
-                @Html.TextAreaFor(m => m.Offer.Description, new { @class = "form-control", placeholder = "Enter description" })
+                @Html.TextAreaFor(m => m.Offer.Description, new { @class = "form-control", placeholder = "Enter description", required = "true" })
                 @Html.ValidationMessageFor(m => m.Offer.Description, "", new { @class = "text-danger" })
             </div>
             <div class="form-group">
@@ -65,4 +65,15 @@
             </div>
         }
     </div>
+
+
 </div>
+@section Scripts{
+    <script>
+        $("form").validate({
+            submitHandler: function (form) {
+                form.submit();
+            }
+        });
+    </script>
+}

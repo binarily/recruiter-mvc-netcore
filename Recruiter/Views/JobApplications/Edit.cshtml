@@ -15,44 +15,44 @@
             <input type="hidden" asp-for="Id" />
             <div class="form-group">
                 <label asp-for="OfferId" class="control-label"></label>
-                <input asp-for="OfferId" class="form-control" />
+                <input asp-for="OfferId" class="form-control" number required />
                 <span asp-validation-for="OfferId" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="FirstName" class="control-label"></label>
-                <input asp-for="FirstName" class="form-control" />
+                <input asp-for="FirstName" class="form-control" required />
                 <span asp-validation-for="FirstName" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="LastName" class="control-label"></label>
-                <input asp-for="LastName" class="form-control" />
+                <input asp-for="LastName" class="form-control" required />
                 <span asp-validation-for="LastName" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="PhoneNumber" class="control-label"></label>
-                <input asp-for="PhoneNumber" class="form-control" />
+                <input asp-for="PhoneNumber" class="form-control" required="true" digits="true" />
                 <span asp-validation-for="PhoneNumber" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="EmailAddress" class="control-label"></label>
-                <input asp-for="EmailAddress" class="form-control" />
+                <input asp-for="EmailAddress" class="form-control" required />
                 <span asp-validation-for="EmailAddress" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="Description" class="control-label"></label>
-                <input asp-for="Description" class="form-control" />
+                <input asp-for="Description" class="form-control" required />
                 <span asp-validation-for="Description" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <div class="checkbox">
                     <label>
-                        <input asp-for="ContractAgreement" /> @Html.DisplayNameFor(model => model.ContractAgreement)
+                        <input asp-for="ContractAgreement" required /> @Html.DisplayNameFor(model => model.ContractAgreement)
                     </label>
                 </div>
             </div>
             <div class="form-group">
                 <label asp-for="CvUrl" class="control-label"></label>
-                <input asp-for="CvUrl" class="form-control" />
+                <input asp-for="CvUrl" class="form-control" required />
                 <span asp-validation-for="CvUrl" class="text-danger"></span>
             </div>
             <div class="form-group">
@@ -60,9 +60,19 @@
             </div>
         </form>
     </div>
+
 </div>
 
 <div>
     <a asp-action="Index">Back to List</a>
 </div>
 
+@section Scripts{
+    <script>
+        $("form").validate({
+            submitHandler: function (form) {
+                form.submit();
+            }
+        });
+    </script>
+}

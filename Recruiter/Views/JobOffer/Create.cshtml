@@ -1,6 +1,6 @@
 ﻿@model JobOfferCreateViewModel
 
-@{ 
+@{
     ViewBag.Title = "Create";
 }
 
@@ -9,60 +9,70 @@
         <h2>New job offer</h2>
         @using (@Html.BeginForm("Create"))
         {
-        @Html.AntiForgeryToken()
-        <div class="form-group">
-            @Html.LabelFor(m => m.Offer.JobTitle)
-            @Html.EditorFor(m => m.Offer.JobTitle, new { htmlAttributes = new { @class = "form-control" } })
-            @Html.ValidationMessageFor(m => m.Offer.JobTitle, "", new { @class = "text-danger" })
-        </div>
-        <div class="form-group">
-            @Html.LabelFor(m => m.Offer.Company)
-            @Html.DropDownListFor(m => m.Offer.CompanyId,
-           Model.Companies.Select(c=>new SelectListItem(c.Name, c.Id.ToString())),
-           new {  @class = "form-control" } )
-            @Html.ValidationMessageFor(m => m.Offer.CompanyId, "", new { @class = "text-danger" })
-        </div>
-        <div class="form-group">
-            @Html.LabelFor(m => m.Offer.Location)
-            @Html.EditorFor(m => m.Offer.Location, new { htmlAttributes = new { @class = "form-control" } })
-            @Html.ValidationMessageFor(m => m.Offer.Location, "", new { @class = "text-danger" })
-        </div>
-        <div class="form-group">
-            @Html.LabelFor(m => m.Offer.SalaryFrom)
-            <div class="input-group">
-                <span class="input-group-addon">PLN</span>
-                @Html.EditorFor(m => m.Offer.SalaryFrom, new { htmlAttributes = new { @class = "form-control", placeholder = "From" } })
-                <span class="input-group-addon">.00</span>
+            @Html.AntiForgeryToken()
+            <div class="form-group">
+                @Html.LabelFor(m => m.Offer.JobTitle)
+                @Html.EditorFor(m => m.Offer.JobTitle, new { htmlAttributes = new { @class = "form-control", required = "true" } })
+                @Html.ValidationMessageFor(m => m.Offer.JobTitle, "", new { @class = "text-danger" })
             </div>
-            @Html.ValidationMessageFor(m => m.Offer.SalaryFrom, "", new { @class = "text-danger" })
-        </div>
-        <div class="form-group">
-            @Html.LabelFor(m => m.Offer.SalaryTo)
-            <div class="input-group">
-                <span class="input-group-addon">PLN</span>
-                @Html.EditorFor(m => m.Offer.SalaryTo, new { htmlAttributes = new { @class = "form-control", placeholder = "To" } })
-                <span class="input-group-addon">.00</span>
+            <div class="form-group">
+                @Html.LabelFor(m => m.Offer.Company)
+                @Html.DropDownListFor(m => m.Offer.CompanyId,
+               Model.Companies.Select(c=>new SelectListItem(c.Name, c.Id.ToString())),
+               new {  @class = "form-control", required = "true" } )
+                @Html.ValidationMessageFor(m => m.Offer.CompanyId, "", new { @class = "text-danger" })
             </div>
-            @Html.ValidationMessageFor(m => m.Offer.SalaryTo, "", new { @class = "text-danger" })
-        </div>
-        <div class="form-group">
-            @Html.LabelFor(m => m.Offer.ValidUntil)
-            <div class="input-group">
-                @Html.EditorFor(m => m.Offer.ValidUntil, new { htmlAttributes = new { @class = "form-control", type = "Date" } })
-                <span class="input-group-addon">
-                    <span class="glyphicon glyphicon-calendar" />
-                </span>
+            <div class="form-group">
+                @Html.LabelFor(m => m.Offer.Location)
+                @Html.EditorFor(m => m.Offer.Location, new { htmlAttributes = new { @class = "form-control", required = "true" } })
+                @Html.ValidationMessageFor(m => m.Offer.Location, "", new { @class = "text-danger" })
             </div>
-            @Html.ValidationMessageFor(m => m.Offer.ValidUntil, "", new { @class = "text-danger" })
-        </div>
-        <div class="form-group">
-            @Html.LabelFor(m => m.Offer.Description)
-            @Html.TextAreaFor(m => m.Offer.Description, new { @class = "form-control", placeholder="Enter description" } )
-            @Html.ValidationMessageFor(m => m.Offer.Description, "", new { @class = "text-danger" })
-        </div>
-        <div class="form-group">
-            <button type="submit" class="btn btn-primary">Create</button>
-        </div>
+            <div class="form-group">
+                @Html.LabelFor(m => m.Offer.SalaryFrom)
+                <div class="input-group">
+                    <span class="input-group-addon">PLN</span>
+                    @Html.EditorFor(m => m.Offer.SalaryFrom, new { htmlAttributes = new { @class = "form-control", placeholder = "From", min = 0, required = "true", number = "true" } })
+                    <span class="input-group-addon">.00</span>
+                </div>
+                @Html.ValidationMessageFor(m => m.Offer.SalaryFrom, "", new { @class = "text-danger" })
+            </div>
+            <div class="form-group">
+                @Html.LabelFor(m => m.Offer.SalaryTo)
+                <div class="input-group">
+                    <span class="input-group-addon">PLN</span>
+                    @Html.EditorFor(m => m.Offer.SalaryTo, new { htmlAttributes = new { @class = "form-control", placeholder = "To", min = 0, required = "true", number = "true" } })
+                    <span class="input-group-addon">.00</span>
+                </div>
+                @Html.ValidationMessageFor(m => m.Offer.SalaryTo, "", new { @class = "text-danger" })
+            </div>
+            <div class="form-group">
+                @Html.LabelFor(m => m.Offer.ValidUntil)
+                <div class="input-group">
+                    @Html.EditorFor(m => m.Offer.ValidUntil, new { htmlAttributes = new { @class = "form-control", type = "Date", required = "true" } })
+                    <span class="input-group-addon">
+                        <span class="glyphicon glyphicon-calendar" />
+                    </span>
+                </div>
+                @Html.ValidationMessageFor(m => m.Offer.ValidUntil, "", new { @class = "text-danger" })
+            </div>
+            <div class="form-group">
+                @Html.LabelFor(m => m.Offer.Description)
+                @Html.TextAreaFor(m => m.Offer.Description, new { @class = "form-control", placeholder = "Enter description", required = "true" })
+                @Html.ValidationMessageFor(m => m.Offer.Description, "", new { @class = "text-danger" })
+            </div>
+            <div class="form-group">
+                <button type="submit" class="btn btn-primary">Create</button>
+            </div>
         }
     </div>
+
 </div>
+@section Scripts{
+    <script>
+        $("form").validate({
+            submitHandler: function (form) {
+                form.submit();
+            }
+        });
+    </script>
+}

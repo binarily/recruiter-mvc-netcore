@@ -4,6 +4,7 @@ using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Recruiter.EntityFramework;
 using Recruiter.Models;
 
@@ -21,19 +22,9 @@ namespace Recruiter.Controllers
         }
 
         //Index
-        public IActionResult Index([FromQuery(Name ="search")] string searchString)
+        public IActionResult Index()
         {
-            if (String.IsNullOrEmpty(searchString)) {
-                var offers = _context.JobOffers;
-                foreach (JobOffer o in offers)
-                    _context.Entry(o).Reference(f => f.Company).Load();
-                return View(offers.ToList());
-            }
-            List<JobOffer> searchResult = _context.JobOffers.Where(a => a.JobTitle.Contains(searchString)).ToList();
-
-            foreach (JobOffer o in searchResult)
-                _context.Entry(o).Reference(f => f.Company).Load();
-            return View(searchResult);
+            return View(_context.JobOffers.Include(x=>x.Company).ToList());
         }
         //Details
         public IActionResult Details(int id)

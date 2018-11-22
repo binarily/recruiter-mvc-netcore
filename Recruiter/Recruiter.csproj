@@ -4,12 +4,18 @@
     <TargetFramework>netcoreapp2.1</TargetFramework>
   </PropertyGroup>
 
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <DocumentationFile>C:\Users\kamil\source\repos\Recruiter\Recruiter\Recruiter.xml</DocumentationFile>
+  </PropertyGroup>
+
   <ItemGroup>
     <PackageReference Include="ExpressiveAnnotationsCore.dll" Version="0.1.0" />
     <PackageReference Include="FontAwesome" Version="4.7.0" />
+    <PackageReference Include="jQuery.Validation" Version="1.17.0" />
     <PackageReference Include="Microsoft.AspNetCore.App" />
     <PackageReference Include="Microsoft.AspNetCore.Razor.Design" Version="2.1.2" PrivateAssets="All" />
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="2.1.5" />
+    <PackageReference Include="Swashbuckle.AspNetCore" Version="4.0.1" />
 <DotNetCliToolReference Include="Microsoft.EntityFrameworkCore.Tools.DotNet">
     <Version>2.0.0-*</Version>
 </DotNetCliToolReference>
