@@ -22,13 +22,18 @@ namespace Recruiter.Controllers
         public AzureAdB2COptions AzureAdB2COptions { get; set; }
 
         [HttpGet]
-        public IActionResult SignIn()
+        public IActionResult SignIn([FromQuery(Name ="redirect")] string redirect)
         {
             var redirectUrl = Url.Action(nameof(HomeController.Index), "Home");
+            if (!String.IsNullOrEmpty(redirect))
+            {
+                redirectUrl = redirect;
+            }
             return Challenge(
                 new AuthenticationProperties { RedirectUri = redirectUrl },
                 OpenIdConnectDefaults.AuthenticationScheme);
         }
+
 
         [HttpGet]
         public IActionResult ResetPassword()
