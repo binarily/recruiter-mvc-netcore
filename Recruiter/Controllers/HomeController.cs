@@ -25,17 +25,22 @@ namespace Recruiter.Controllers
         }
         public async Task<IActionResult> Privacy()
         {
+            bool isIngroup = await CheckIfUserIsAnAdmin();
+            
+            if (!isIngroup)
+                return RedirectToAction("SignIn", "Session", new { redirect = "Home/Privacy" });
+            return View();
+        }
+
+        private async Task<bool> CheckIfUserIsAnAdmin()
+        {
             // AAD usage example
             AADGraph graph = new AADGraph(AppSettings);
             string groupName = "Admins";
             string groupId = AppSettings.AADGroups.FirstOrDefault(g => String.Compare(g.Name, groupName) == 0).Id;
             bool isIngroup = await graph.IsUserInGroup(User.Claims, groupId);
-            if (isIngroup)
-                return View();
-            else
-                return RedirectToAction("SignIn", "Session", new { redirect = "Home/Privacy" });
+            return isIngroup;
         }
-        
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()

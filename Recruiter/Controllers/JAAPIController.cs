@@ -2,10 +2,13 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using Recruiter.EntityFramework;
+using Recruiter.Helpers;
 using Recruiter.Models;
 
 namespace Recruiter.Controllers
@@ -21,10 +24,14 @@ namespace Recruiter.Controllers
     public class JAAPIController : ControllerBase
     {
         private readonly DataContext _context;
-
-        public JAAPIController(DataContext context)
+        private IConfiguration _configuration;
+        private AppSettings AppSettings { get; set; }
+        public JAAPIController(DataContext context, IConfiguration Configuration)
         {
             _context = context;
+
+            _configuration = Configuration;
+            AppSettings = _configuration.GetSection("AppSettings").Get<AppSettings>();
         }
 
         // GET: api/applications/5
@@ -34,8 +41,12 @@ namespace Recruiter.Controllers
         /// <param name="id"></param>
         /// <returns>An application with a given ID.</returns>
         [HttpGet("{offerid}")]
-        public IActionResult GetJobApplicationByOffer([FromRoute] int offerid)
+        public async Task<IActionResult> GetJobApplicationByOffer([FromRoute] int offerid)
         {
+
+            bool isIngroup = await CheckIfUserIsAnAdmin();
+            if (!isIngroup)
+                return Forbid();
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
@@ -71,6 +82,15 @@ namespace Recruiter.Controllers
         private bool JobApplicationExists(int id)
         {
             return _context.JobApplications.Any(e => e.Id == id);
+        }
+        private async Task<bool> CheckIfUserIsAnAdmin()
+        {
+            // AAD usage example
+            AADGraph graph = new AADGraph(AppSettings);
+            string groupName = "Admins";
+            string groupId = AppSettings.AADGroups.FirstOrDefault(g => String.Compare(g.Name, groupName) == 0).Id;
+            bool isIngroup = await graph.IsUserInGroup(User.Claims, groupId);
+            return isIngroup;
         }
     }
 }

@@ -51,38 +51,47 @@
             }
                 <div>
                     @Html.ActionLink("Apply now", "Create", "JobApplications", new { offerId = Model.Offer.Id }, new { @class = "btn btn-primary" })
-                    @Html.ActionLink("Edit", "Edit", new { id = Model.Offer.Id }, new { @class = "btn btn-primary" })
-                    @using (Html.BeginForm("Delete", "JobOffer", new { id = Model.Offer.Id }, FormMethod.Post, null, new { style = "display:inline;" }))
+                    @if (User.Identity.IsAuthenticated)
                     {
-                        @Html.AntiForgeryToken()
-                        <button type="submit" class="btn btn-danger">Delete</button>
+                        if (User.IsInRole("Admins"))
+                        {
+                            @Html.ActionLink("Edit", "Edit", new { id = Model.Offer.Id }, new { @class = "btn btn-primary" })
+                            @using (Html.BeginForm("Delete", "JobOffer", new { id = Model.Offer.Id }, FormMethod.Post, null, new { style = "display:inline;" }))
+                            {
+                                @Html.AntiForgeryToken()
+                                <button type="submit" class="btn btn-danger">Delete</button>
+                            }
+                        }
                     }
-                </div>
+                        </div>
         </div>
     </div>
 
 </div>
-<div class="row page-box">
-    <table class="table">
-        <thead>
-            <tr>
-                <th>
-                    Name
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.Applications.First().PhoneNumber)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.Applications.First().EmailAddress)
-                </th>
-                <th></th>
-            </tr>
-        </thead>
-        <tbody id="applicationsList">
-        </tbody>
-    </table>
-    <script src="https://ajax.aspnetcdn.com/ajax/jQuery/jquery-2.0.3.min.js"></script>
-    <script>
+@if (User.Identity.IsAuthenticated)
+{
+    if (User.IsInRole("Admins"))
+    {
+        <div class="row page-box">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>
+                            Name
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.Applications.First().PhoneNumber)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.Applications.First().EmailAddress)
+                        </th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody id="applicationsList"></tbody>
+            </table>
+            <script src="https://ajax.aspnetcdn.com/ajax/jQuery/jquery-2.0.3.min.js"></script>
+            <script>
         var uri = '../../api/applications/'+@Model.Offer.Id;
 
         $(document).ready(function () {
@@ -99,8 +108,10 @@
                     });
                 });
         })
-    </script>
-</div>
-<div>
-    @Html.ActionLink("Return to job offers", "Index", "JobOffer", null, new { @class="btn btn-primary"})
-</div>
+            </script>
+        </div>
+    }
+}
+        <div>
+            @Html.ActionLink("Return to job offers", "Index", "JobOffer", null, new { @class = "btn btn-primary" })
+        </div>

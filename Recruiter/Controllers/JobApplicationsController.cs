@@ -3,10 +3,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using Recruiter.EntityFramework;
+using Recruiter.Helpers;
 using Recruiter.Models;
 
 namespace Recruiter.Controllers
@@ -14,21 +17,31 @@ namespace Recruiter.Controllers
     public class JobApplicationsController : Controller
     {
         private readonly DataContext _context;
+        private IConfiguration _configuration;
+        private AppSettings AppSettings { get; set; }
 
-        public JobApplicationsController(DataContext context)
+        public JobApplicationsController(DataContext context, IConfiguration Configuration)
         {
             _context = context;
+            _configuration = Configuration;
+            AppSettings = _configuration.GetSection("AppSettings").Get<AppSettings>();
         }
 
         // GET: JobApplications
         public async Task<IActionResult> Index()
         {
+            bool isIngroup = await CheckIfUserIsAnAdmin();
+            if (!isIngroup)
+                return RedirectToAction("SignIn", "Session", new { redirect = "JobApplications/Index" });
             return View(await _context.JobApplications.ToListAsync());
         }
 
         // GET: JobApplications/Details/5
         public async Task<IActionResult> Details(int? id)
         {
+            bool isIngroup = await CheckIfUserIsAnAdmin();
+            if (!isIngroup)
+                return RedirectToAction("SignIn", "Session", new { redirect = "JobApplications/Edit/"+id });
             if (id == null)
             {
                 return NotFound();
@@ -74,6 +87,9 @@ namespace Recruiter.Controllers
         // GET: JobApplications/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
+            bool isIngroup = await CheckIfUserIsAnAdmin();
+            if (!isIngroup)
+                return RedirectToAction("SignIn", "Session", new { redirect = "JobApplications/Edit/"+id });
             if (id == null)
             {
                 return NotFound();
@@ -92,8 +108,12 @@ namespace Recruiter.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admins")]
         public async Task<IActionResult> Edit(int id, [Bind("Id,OfferId,FirstName,LastName,PhoneNumber,EmailAddress,Description,ContractAgreement,CvUrl")] JobApplication jobApplication)
         {
+            bool isIngroup = await CheckIfUserIsAnAdmin();
+            if (!isIngroup)
+                return RedirectToAction("SignIn", "Session", new { redirect = "JobApplications/Edit/"+id });
             if (id != jobApplication.Id)
             {
                 return NotFound();
@@ -125,6 +145,9 @@ namespace Recruiter.Controllers
         // GET: JobApplications/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
+            bool isIngroup = await CheckIfUserIsAnAdmin();
+            if (!isIngroup)
+                return RedirectToAction("SignIn", "Session", new { redirect = "JobApplications/Detail/"+id });
             if (id == null)
             {
                 return NotFound();
@@ -145,6 +168,9 @@ namespace Recruiter.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
+            bool isIngroup = await CheckIfUserIsAnAdmin();
+            if (!isIngroup)
+                return RedirectToAction("SignIn", "Session", new { redirect = "JobApplications/Details/"+id });
             var jobApplication = await _context.JobApplications.FindAsync(id);
             _context.JobApplications.Remove(jobApplication);
             await _context.SaveChangesAsync();
@@ -155,5 +181,15 @@ namespace Recruiter.Controllers
         {
             return _context.JobApplications.Any(e => e.Id == id);
         }
+        private async Task<bool> CheckIfUserIsAnAdmin()
+        {
+            // AAD usage example
+            AADGraph graph = new AADGraph(AppSettings);
+            string groupName = "Admins";
+            string groupId = AppSettings.AADGroups.FirstOrDefault(g => String.Compare(g.Name, groupName) == 0).Id;
+            bool isIngroup = await graph.IsUserInGroup(User.Claims, groupId);
+            return isIngroup;
+        }
     }
+
 }

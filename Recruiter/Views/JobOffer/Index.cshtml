@@ -19,143 +19,148 @@
     <div id="updatePanel">
 
     </div>
-    @Html.ActionLink("Create new offer", "Create", "JobOffer", null, new { @class = "btn btn-primary" })
-
-
-    @section Scripts{
-        <script>
-
-            $(document).ready(function () {
-                var currentPage = 1;
-                fetchData(1,"");
-                $('#updatePanel').on('click', '.footerContent a', function (e) {
-                    e.preventDefault();
-                    var pageNo = parseInt($(this).html());
-                    currentPage = pageNo;
-                    fetchData(currentPage, "");
-                });
-                function fetchData(pageNo, query) {
-                    var $loading = "<div class='loading'>Please wait...</div>";
-                    $('#updatePanel').prepend($loading);
-                    $.ajax({
-                        url: '/api/offers',
-                        type: 'GET',
-                        data: { page: pageNo, query:query },
-                        dataType: 'json',
-                        success: function (data) {
-                            var $table = $('<table/>').addClass('table table-responsive table-striped table-bordered');
-                            var $header = $('<thead/>').html('<tr><th>Job title</th><th>Company</th><th>Location</th><th>Created</th></tr>');
-                            $table.append($header);
-                            $.each(data.offers, function (i, item) {
-                                var $row = $('<tr/>');
-                                $row.append($('<td/>').html(`<a href="JobOffer/Details/${item.id}">${item.jobTitle}</a>`));
-                                $row.append($('<td/>').html(item.company.name));
-                                $row.append($('<td/>').html(item.location));
-                                $row.append($('<td/>').html(item.created));
-                                $table.append($row);
-                            });
-
-                            var totalPage = parseInt(data.totalPage);
-                            var $footer = $('<tr/>');
-                            var $footerTD = $('<td/>').attr('colspan', 4).addClass('footerContent');
-
-                            if (totalPage > 0) {
-                                for (var i = 1; i <= totalPage; i++) {
-                                    var $page = $('<span/>').addClass((i == currentPage) ? "current" : "");
-                                    $page.html((i == currentPage) ? i : "<a href='#'>" + i + "</a>");
-                                    $footerTD.append($page);
-                                }
-                                $footer.append($footerTD);
-                            }
-                            $table.append($footer);
-
-                            $('#updatePanel').html($table);
-                        },
-                        error: function () {
-                            alert('Error! Please try again.');
-                        }
-                    }).done(function () {
-
-                        $loading.remove();
-                    });
-                }
-                function find() {
-                    let query = $('#search').val();
-                    fetchData(1, "");
-                }
-                //For input to search after pressing enter
-                $("#search").on('keyup', function (e) {
-                    if (e.keyCode == 13) {
-                        find();
-                    }
-                });
-            });
-
-
-        </script>
+    @if (User.Identity.IsAuthenticated)
+    {
+        if (User.IsInRole("Admins"))
+        {
+            @Html.ActionLink("Create new offer", "Create", "JobOffer", null, new { @class = "btn btn-primary" })
+        }
     }
 
-    <style>
+            @section Scripts{
+                <script>
 
-        #updatePanel {
-            width: 95%;
-            margin: 0 auto;
-            position: relative;
-        }
+                    $(document).ready(function () {
+                        var currentPage = 1;
+                        fetchData(1, "");
+                        $('#updatePanel').on('click', '.footerContent a', function (e) {
+                            e.preventDefault();
+                            var pageNo = parseInt($(this).html());
+                            currentPage = pageNo;
+                            fetchData(currentPage, "");
+                        });
+                        function fetchData(pageNo, query) {
+                            var $loading = "<div class='loading'>Please wait...</div>";
+                            $('#updatePanel').prepend($loading);
+                            $.ajax({
+                                url: '/api/offers',
+                                type: 'GET',
+                                data: { page: pageNo, query: query },
+                                dataType: 'json',
+                                success: function (data) {
+                                    var $table = $('<table/>').addClass('table table-responsive table-striped table-bordered');
+                                    var $header = $('<thead/>').html('<tr><th>Job title</th><th>Company</th><th>Location</th><th>Created</th></tr>');
+                                    $table.append($header);
+                                    $.each(data.offers, function (i, item) {
+                                        var $row = $('<tr/>');
+                                        $row.append($('<td/>').html(`<a href="JobOffer/Details/${item.id}">${item.jobTitle}</a>`));
+                                        $row.append($('<td/>').html(item.company.name));
+                                        $row.append($('<td/>').html(item.location));
+                                        $row.append($('<td/>').html(item.created));
+                                        $table.append($row);
+                                    });
 
-        .loading {
-            float: left;
-            position: absolute;
-            margin-left: 40%;
-            width: 200px;
-            top: 100px;
-            padding: 3px;
-            border: 1px solid #6E6E6E;
-            background-color: #FFFFFF;
-            text-align: center;
-        }
+                                    var totalPage = parseInt(data.totalPage);
+                                    var $footer = $('<tr/>');
+                                    var $footerTD = $('<td/>').attr('colspan', 4).addClass('footerContent');
 
-        table {
-            font-family: arial, sans-serif;
-            border-collapse: collapse;
-            width: 100%;
-        }
+                                    if (totalPage > 0) {
+                                        for (var i = 1; i <= totalPage; i++) {
+                                            var $page = $('<span/>').addClass((i == currentPage) ? "current" : "");
+                                            $page.html((i == currentPage) ? i : "<a href='#'>" + i + "</a>");
+                                            $footerTD.append($page);
+                                        }
+                                        $footer.append($footerTD);
+                                    }
+                                    $table.append($footer);
 
-        td, th {
-            border: 1px solid #dddddd;
-            text-align: left;
-            padding: 8px;
-        }
+                                    $('#updatePanel').html($table);
+                                },
+                                error: function () {
+                                    alert('Error! Please try again.');
+                                }
+                            }).done(function () {
 
-        tr:nth-child(even) {
-            background-color: #dddddd;
-        }
+                                $loading.remove();
+                            });
+                        }
+                        function find() {
+                            let query = $('#search').val();
+                            fetchData(1, "");
+                        }
+                        //For input to search after pressing enter
+                        $("#search").on('keyup', function (e) {
+                            if (e.keyCode == 13) {
+                                find();
+                            }
+                        });
+                    });
 
-        span.current {
-            cursor: auto !important;
-            background-color: #6E6E6E !important;
-            color: #ffffff;
-            font-weight: bold;
-            padding: 5px 10px;
-            border: 1px solid #000000;
-            margin-right: 4px;
-        }
 
-        td.footerContent span a {
-            display: inline-block;
-            padding: 3px 10px;
-            background-color: chartreuse;
-            margin-right: 4px;
-            border: 1px solid #998787;
-            cursor: pointer;
-        }
+                </script>
+            }
 
-        td.footerContent span a {
-            text-decoration: none;
-        }
+            <style>
 
-        td.footerContent {
-            text-align: right;
-        }
-    </style>
-</div>
+                #updatePanel {
+                    width: 95%;
+                    margin: 0 auto;
+                    position: relative;
+                }
+
+                .loading {
+                    float: left;
+                    position: absolute;
+                    margin-left: 40%;
+                    width: 200px;
+                    top: 100px;
+                    padding: 3px;
+                    border: 1px solid #6E6E6E;
+                    background-color: #FFFFFF;
+                    text-align: center;
+                }
+
+                table {
+                    font-family: arial, sans-serif;
+                    border-collapse: collapse;
+                    width: 100%;
+                }
+
+                td, th {
+                    border: 1px solid #dddddd;
+                    text-align: left;
+                    padding: 8px;
+                }
+
+                tr:nth-child(even) {
+                    background-color: #dddddd;
+                }
+
+                span.current {
+                    cursor: auto !important;
+                    background-color: #6E6E6E !important;
+                    color: #ffffff;
+                    font-weight: bold;
+                    padding: 5px 10px;
+                    border: 1px solid #000000;
+                    margin-right: 4px;
+                }
+
+                td.footerContent span a {
+                    display: inline-block;
+                    padding: 3px 10px;
+                    background-color: chartreuse;
+                    margin-right: 4px;
+                    border: 1px solid #998787;
+                    cursor: pointer;
+                }
+
+                td.footerContent span a {
+                    text-decoration: none;
+                }
+
+                td.footerContent {
+                    text-align: right;
+                }
+            </style>
+        </div>
