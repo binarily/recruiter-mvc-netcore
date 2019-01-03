@@ -55,8 +55,9 @@ namespace Recruiter
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
 
-            var connection = @"Server=(localdb)\mssqllocaldb;Database=Recruiter;Trusted_Connection=True;";
+            //var connection = @"Server=(localdb)\mssqllocaldb;Database=Recruiter;Trusted_Connection=True;";
 
+            var connection = @"Server=tcp:sqlserver2yeev63ua7mbm.database.windows.net,1433;Initial Catalog=RecruiterDB;Persist Security Info=False;User ID=czerniakk;Password=ArrigatoGozaimas2137;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;";
             services.AddDbContext<DataContext>(options => options.UseSqlServer(connection));
 
             //Swagger configuration
