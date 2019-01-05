@@ -91,7 +91,7 @@ namespace Recruiter.Controllers
                     //await container.CreateIfNotExistsAsync();
 
                     // Get the reference to the block blob from the container
-                    CloudBlockBlob blockBlob = container.GetBlockBlobReference(jobApplication.CVFile.Name);
+                    CloudBlockBlob blockBlob = container.GetBlockBlobReference(DateTime.Now.ToLongDateString()+jobApplication.CVFile.Name);
                     jobApplication.CvUrl = blockBlob.Uri.AbsoluteUri;
 
                     // Upload the file
