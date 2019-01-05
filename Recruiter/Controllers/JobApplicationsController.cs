@@ -8,6 +8,8 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
+using Microsoft.WindowsAzure.Storage;
+using Microsoft.WindowsAzure.Storage.Blob;
 using Recruiter.EntityFramework;
 using Recruiter.Helpers;
 using Recruiter.Models;
@@ -77,10 +79,35 @@ namespace Recruiter.Controllers
         {
             if (ModelState.IsValid)
             {
+                string connectionString = "DefaultEndpointsProtocol=https;AccountName=recruitercvs;AccountKey=72dirRppgAhr4ZwbmGOR9UJbdhKADea11VcWTi1uBHcGhlfNNIFvY6mRKFl55XeoU1v2NgHanU9fxTbLZYHMrw==;EndpointSuffix=core.windows.net";
+
+                CloudStorageAccount storageAccount = null;
+                if (CloudStorageAccount.TryParse(connectionString, out storageAccount))
+                {
+                    CloudBlobClient cloudBlobClient = storageAccount.CreateCloudBlobClient();
+
+                    // Get reference to the blob container by passing the name by reading the value from the configuration (appsettings.json)
+                    CloudBlobContainer container = cloudBlobClient.GetContainerReference("applications");
+                    //await container.CreateIfNotExistsAsync();
+
+                    // Get the reference to the block blob from the container
+                    CloudBlockBlob blockBlob = container.GetBlockBlobReference(jobApplication.CVFile.Name);
+                    jobApplication.CvUrl = blockBlob.Uri.AbsoluteUri;
+
+                    // Upload the file
+                    var stream = jobApplication.CVFile.OpenReadStream();
+                    await blockBlob.UploadFromStreamAsync(stream).ContinueWith(delegate { stream.Close(); });
+                }
                 _context.Add(jobApplication);
                 await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index), "JobOffers");
+                return RedirectToAction(nameof(Index), "JobOffer");
             }
+            JobOffer offer = _context.JobOffers.First(m => m.Id == jobApplication.OfferId);
+            if (offer == null)
+            {
+                return new StatusCodeResult((int)HttpStatusCode.BadRequest);
+            }
+            jobApplication.Offer = offer;
             return View(jobApplication);
         }
 
