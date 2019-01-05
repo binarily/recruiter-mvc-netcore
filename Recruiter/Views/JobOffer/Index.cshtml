@@ -5,12 +5,12 @@
 }
 
 <div class="row page-box">
-    <h2>Job offers</h2>
+    <h2>Job offers<span data-bind="text: nameFor"/></h2>
     <div class="input-group col-md-12" style="margin-bottom: 14px">
         <input type="text" class="form-control" placeholder="Look for your next job..."
-               name="search" id="search" />
+               name="search" id="search" data-bind='value: query' />
         <span class="input-group-btn">
-            <button class="btn btn-info" onclick="find();">
+            <button class="btn btn-info" id="searchBtn">
                 <i class="glyphicon glyphicon-search"></i>
             </button>
         </span>
@@ -86,7 +86,7 @@
                         }
                         function find() {
                             let query = $('#search').val();
-                            fetchData(1, "");
+                            fetchData(1, query);
                         }
                         //For input to search after pressing enter
                         $("#search").on('keyup', function (e) {
@@ -94,6 +94,24 @@
                                 find();
                             }
                         });
+                        $("#searchBtn").on('click', () => find());
+
+
+                        //Knockout implementation
+                        var ViewModel = function (query) {
+                            this.query = ko.observable(query);
+
+                            this.nameFor = ko.computed(function () {
+                                find();
+                                if (this.query() === "") {
+                                    return "";
+                                } else {
+                                    return " for \"" + this.query() + "\"";
+                                }
+                            }, this);
+                        };
+
+                        ko.applyBindings(new ViewModel("")); // This makes Knockout get to work
                     });
 
 
