@@ -79,7 +79,7 @@ namespace Recruiter.Controllers
         {
             if (ModelState.IsValid)
             {
-                string connectionString = "DefaultEndpointsProtocol=https;AccountName=recruitercvs;AccountKey=72dirRppgAhr4ZwbmGOR9UJbdhKADea11VcWTi1uBHcGhlfNNIFvY6mRKFl55XeoU1v2NgHanU9fxTbLZYHMrw==;EndpointSuffix=core.windows.net";
+                string connectionString = "DefaultEndpointsProtocol=https;AccountName=recruitercv;AccountKey=9PQrCTrlMTrYAYY6W0N+E0ufII4phVaWgKex/SY/pqUCW/dYokwh3qVu1jMqeRGvhwWVEGQvfZGOpP+LDP3gZA==;EndpointSuffix=core.windows.net";
 
                 CloudStorageAccount storageAccount = null;
                 if (CloudStorageAccount.TryParse(connectionString, out storageAccount))
@@ -91,7 +91,7 @@ namespace Recruiter.Controllers
                     //await container.CreateIfNotExistsAsync();
 
                     // Get the reference to the block blob from the container
-                    CloudBlockBlob blockBlob = container.GetBlockBlobReference(DateTime.Now.ToLongDateString()+jobApplication.CVFile.Name);
+                    CloudBlockBlob blockBlob = container.GetBlockBlobReference(new Random(DateTime.Now.Millisecond).Next()+jobApplication.CVFile.Name);
                     jobApplication.CvUrl = blockBlob.Uri.AbsoluteUri;
 
                     // Upload the file
