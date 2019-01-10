@@ -14,6 +14,8 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Recruiter.EntityFramework;
 using Swashbuckle.AspNetCore.Swagger;
+using System.Reflection;
+using System.IO;
 
 namespace Recruiter
 {
@@ -55,15 +57,18 @@ namespace Recruiter
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
 
-            var connection = @"Server=(localdb)\mssqllocaldb;Database=Recruiter;Trusted_Connection=True;";
+            //var connection = @"Server=(localdb)\mssqllocaldb;Database=Recruiter;Trusted_Connection=True;";
 
+            var connection = @"Server=tcp:recruiterkamilczerniak.database.windows.net,1433;Initial Catalog=RecruiterDB;Persist Security Info=False;User ID=czerniakk;Password=ArrigatoGozaimas2137;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;";
             services.AddDbContext<DataContext>(options => options.UseSqlServer(connection));
 
             //Swagger configuration
             services.AddSwaggerGen(c =>
             {
             c.SwaggerDoc("v1", new Info { Title = "Recruiter API", Version = "v1" });
-            c.IncludeXmlComments("Recruiter.xml");
+                var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+                var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
+                c.IncludeXmlComments(xmlPath);
             });
         }
 

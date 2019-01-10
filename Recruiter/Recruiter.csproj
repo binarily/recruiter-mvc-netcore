@@ -2,18 +2,26 @@
 
   <PropertyGroup>
     <TargetFramework>netcoreapp2.1</TargetFramework>
+    <UserSecretsId>365cbb9c-4406-4b0c-9239-64a72e852da3</UserSecretsId>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
     <DocumentationFile>C:\Users\kamil\source\repos\Recruiter\Recruiter\Recruiter.xml</DocumentationFile>
   </PropertyGroup>
 
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <DocumentationFile>C:\Users\kamil\Source\Repos\Recruiter\Recruiter\Recruiter.xml</DocumentationFile>
+  </PropertyGroup>
+
   <ItemGroup>
     <PackageReference Include="ExpressiveAnnotationsCore.dll" Version="0.1.0" />
     <PackageReference Include="FontAwesome" Version="4.7.0" />
     <PackageReference Include="jQuery.Validation" Version="1.17.0" />
+    <PackageReference Include="knockoutjs" Version="3.4.2" />
     <PackageReference Include="Microsoft.AspNetCore.App" />
     <PackageReference Include="Microsoft.AspNetCore.Razor.Design" Version="2.1.2" PrivateAssets="All" />
+    <PackageReference Include="Microsoft.AspNetCore.Razor.Language" Version="2.2.0" />
+    <PackageReference Include="Microsoft.Azure.Storage.Blob" Version="9.4.2" />
     <PackageReference Include="Microsoft.Identity.Client" Version="2.5.0-preview" />
     <PackageReference Include="Microsoft.IdentityModel.Clients.ActiveDirectory" Version="4.4.1" />
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="2.1.6" />
