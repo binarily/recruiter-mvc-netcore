@@ -14,6 +14,8 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Recruiter.EntityFramework;
 using Swashbuckle.AspNetCore.Swagger;
+using System.Reflection;
+using System.IO;
 
 namespace Recruiter
 {
@@ -64,7 +66,9 @@ namespace Recruiter
             services.AddSwaggerGen(c =>
             {
             c.SwaggerDoc("v1", new Info { Title = "Recruiter API", Version = "v1" });
-            c.IncludeXmlComments("Recruiter.xml");
+                var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+                var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
+                c.IncludeXmlComments(xmlPath);
             });
         }
 
