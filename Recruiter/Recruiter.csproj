@@ -9,6 +9,10 @@
     <DocumentationFile>C:\Users\kamil\source\repos\Recruiter\Recruiter\Recruiter.xml</DocumentationFile>
   </PropertyGroup>
 
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <DocumentationFile>C:\Users\kamil\Source\Repos\Recruiter\Recruiter\Recruiter.xml</DocumentationFile>
+  </PropertyGroup>
+
   <ItemGroup>
     <PackageReference Include="ExpressiveAnnotationsCore.dll" Version="0.1.0" />
     <PackageReference Include="FontAwesome" Version="4.7.0" />
